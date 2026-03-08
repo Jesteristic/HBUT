@@ -1,47 +1,36 @@
-import atexit
 import threading
-from threading import Lock, Event
-from typing import Dict, Any, Optional
+from threading import Lock, Thread
+from typing import Dict, Optional
 from loguru import logger
 import blackboxprotobuf
-from configs import SearchConfig
-from curl_cffi import requests
+from configs import CrawlerConfig
+from sql.sql_tools import RedisUtils
 
 
-class WangFangBase:
-    def __init__(
-            self,
-            config: Optional[SearchConfig] = None,
-            cookies: Optional[Dict] = None
-    ):
+class WangFangBase(threading.Thread):
+    def __init__(self, config: Optional[CrawlerConfig] = None):
         """
         初始化搜索器
 
         Args:
             config: 搜索配置
-            cookies: Cookie字典
         """
-        self.config = config or SearchConfig()
-        self._cookies = cookies or {}
-        self._shutdown_event = Event()  # 添加关闭事件
-
-        # 模板十六进制字符串
-        self.TEMPLATE_HEX_STRING = ''
+        super().__init__()
+        self.config = config or CrawlerConfig()
 
         # 基本配置
-        self.BASE_URL = "https://s.wanfangdata.com.cn"
-
-        # 存储所有线程的 session
-        self._sessions = {}  # 存储所有session
-        self._sessions_lock = Lock()  # 保护 sessions 的锁
-        self._cleanup_lock = Lock()  # 清理锁
-
         # 消息类型缓存
         self._message_type = None
         self._message_type_lock = Lock()
-
-        # 注册清理函数
-        atexit.register(self.close)
+        self.redis = None
+        # Redis实例
+        for _ in range(config.max_retries):
+            try:
+                self.redis = RedisUtils()
+                break
+            except Exception as e:
+                logger.warning(f"Redis 第{config.max_retries + 1}次初始化失败: {e}")
+        self.REDIS_TASK_LIST_KEY = "wanfang:task_queue"
 
     @property
     def headers(self) -> Dict[str, str]:
@@ -68,21 +57,6 @@ class WangFangBase:
         }
         return headers
 
-    def _get_thread_session(self) -> requests.Session:
-        """获取当前线程的会话（线程安全）"""
-        thread_id = threading.get_ident()
-
-        # 如果搜索器正在关闭，不再创建新session
-        if self._shutdown_event.is_set():
-            raise RuntimeError("搜索器正在关闭，无法创建新会话")
-
-        with self._sessions_lock:
-            if thread_id not in self._sessions:
-                session = requests.Session()
-                self._sessions[thread_id] = session
-                return session
-            return self._sessions[thread_id]
-
     def _get_message_type(self) -> Dict:
         """获取消息类型（线程安全缓存）"""
         with self._message_type_lock:
@@ -107,32 +81,6 @@ class WangFangBase:
             protobuf 字节数据
         '''
         pass
-
-    def close(self):
-        """关闭搜索器，清理资源"""
-        if self._shutdown_event.is_set():
-            return
-
-        with self._cleanup_lock:
-            if not self._shutdown_event.is_set():
-                self._shutdown_event.set()
-                logger.info("开始关闭线程...")
-
-                # 清理所有 session
-                with self._sessions_lock:
-                    closed_count = 0
-                    for thread_id, session in self._sessions.items():
-                        try:
-                            session.close()
-                            closed_count += 1
-                        except Exception as e:
-                            logger.warning(f"关闭线程 {thread_id} 的 session 时出错: {e}")
-                    self._sessions.clear()
-                    logger.info(f"已关闭 {closed_count} 个 session")
-
-                # 注销 atexit 注册
-                atexit.unregister(self.close)
-                logger.info("线程已完全关闭")
 
     def _make_request(self, *args, **kwargs):
         pass

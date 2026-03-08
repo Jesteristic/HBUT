@@ -7,7 +7,7 @@ from typing import Optional
 
 
 @dataclass
-class SearchConfig:
+class CrawlerConfig:
     """搜索配置类"""
     timeout: int = 30
     max_retries: int = 3

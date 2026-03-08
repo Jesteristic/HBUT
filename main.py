@@ -1,4 +1,5 @@
 import blackboxprotobuf
+from curl_cffi import requests
 
 # Search
 '''
@@ -7,11 +8,12 @@ import blackboxprotobuf
 '''
 
 # Detail.DetailService/getDetailInFormation
-TEMPLATE_HEX_STRING='0A 06 50 61 74 65 6E 74 12 70 43 68 31 51 59 58 52 6C 62 6E 52 4F 5A 58 64 54 62 32 78 79 4F 56 4D 79 4D 44 49 32 4D 44 45 79 4E 7A 45 31 4E 54 45 7A 4F 52 49 70 57 6B 78 66 51 30 34 79 4D 44 49 31 4D 54 45 34 4D 54 55 79 4E 54 45 75 57 46 39 44 54 6A 45 79 4D 54 49 30 4D 54 6B 78 4E 6B 46 66 4D 6A 41 79 4E 6A 41 78 4D 44 49 61 43 47 31 31 59 6E 6B 35 63 48 63 79 3A 07 41 49 5F 52 45 41 44 3A 0A 41 49 5F 45 58 54 52 41 43 54'
+TEMPLATE_HEX_STRING = '0a06506174656e741270436831515958526c626e524f5a586454623278794f564d794d4449324d4445794e7a45314e54457a4f524970576b7866513034794d4449314d5445344e6a63354e7a4d7557463944546a45794d5449354e4455794e5546664d6a41794e6a41784d446b614347747865545678634734783a0741495f524541443a0a41495f45585452414354'
 byte_string = bytes.fromhex(TEMPLATE_HEX_STRING.replace(" ", ""))
 _, _message_type = blackboxprotobuf.protobuf_to_json(byte_string)
 print(_)
 print(_message_type)
+resp = requests.post('https://s.wanfangdata.com.cn/Detail.DetailService/getDetailInFormation', )
 
 '''
 解码请求{
@@ -25,3 +27,33 @@ print(_message_type)
 # 类型
 {'1': {'type': 'bytes', 'name': ''}, '2': {'type': 'bytes', 'name': ''}, '7': {'type': 'bytes', 'name': ''}}
 '''
+if __name__ == '__main__':
+    import requests
+
+    headers = {
+        "accept": "*/*",
+        "accept-language": "zh-CN,zh;q=0.9,zh-TW;q=0.8",
+        "content-type": "application/grpc-web+proto",
+        "cookies": "CASTGC=;CASTGCSpecial=;",
+        "httphost": "d.wanfangdata.com.cn",
+        "httpreferer": "https://s.wanfangdata.com.cn/patent?q=%E5%88%86%E7%B1%BB%E5%8F%B7%3AA01%20%20%E6%A4%8D%E7%89%A9&p=1",
+        "origin": "https://d.wanfangdata.com.cn",
+        "priority": "u=1, i",
+        "referer": "https://d.wanfangdata.com.cn/patent/Ch1QYXRlbnROZXdTb2xyOVMyMDI2MDEyNzE1NTEzORIpWkxfQ04yMDI1MTE2MTA1OTUuN19DTjEyMTI0MTg0MkFfMjAyNjAxMDIaCHZ4Zm1pbnlm",
+        "sec-ch-ua": "\"Not:A-Brand\";v=\"99\", \"Microsoft Edge\";v=\"145\", \"Chromium\";v=\"145\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0",
+        "x-grpc-web": "1",
+        "x-user-agent": "grpc-web-javascript/0.1"
+    }
+    url = "https://d.wanfangdata.com.cn/Detail.DetailService/getDetailInFormation"
+    data = '\\u0000\\u0000\\u0000\\u0000\\u008f\\n\\u0006Patent\\u0012pCh1QYXRlbnROZXdTb2xyOVMyMDI2MDEyNzE1NTEzORIpWkxfQ04yMDI1MTE2MTA1OTUuN19DTjEyMTI0MTg0MkFfMjAyNjAxMDIaCHZ4Zm1pbnlm:\\u0007AI_READ:\\nAI_EXTRACT'.encode(
+        'unicode_escape')
+    data = b'\x00\x00\x00\x00\x8f\n\x06Patent\x12pCh1QYXRlbnROZXdTb2xyOVMyMDI2MDEyNzE1NTEzORIpWkxfQ04yMDI1MTE2MTA1OTUuN19DTjEyMTI0MTg0MkFfMjAyNjAxMDIaCHZ4Zm1pbnlm:\x07AI_READ:\nAI_EXTRACT'
+    response = requests.post(url, headers=headers, data=data)
+    print(response.text)
+    print(response)

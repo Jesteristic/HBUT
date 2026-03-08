@@ -43,4 +43,3 @@ def extract_task_ids(pages_patent_data: Dict[str, Any]) -> List[str]:
         logger.error(f"解析API响应结构时出错: {e}")
 
     return task_ids
-
