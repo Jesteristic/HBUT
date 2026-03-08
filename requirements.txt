@@ -1,0 +1,7 @@
+flask
+redis
+pymysql
+dbutils
+loguru
+curl-cffi
+blackboxprotobuf
