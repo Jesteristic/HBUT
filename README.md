@@ -1,103 +1,303 @@
-# lfq_hbut 基于专利地图的技术机会发现系统研究与设计项目
+# 基于专利地图的技术机会发现系统
 
-## 研究目的
-通过融合自然语言处理技术完成专利文本的自动化解析与技术要素提取，构建技术热点关联矩阵，结合 GTM 算法与多维空间专利地图理论实现专利地图的自动化生成与技术机会的可视化挖掘，同时构建多维度技术机会评价指标体系实现创新机会的量化筛选。本研究最终形成一套集专利数据预处理、技术要素提取、技术热点分析、专利地图可视化、技术机会识别与评价于一体的系统化工具，为企业、科研机构的技术研发决策、专利布局规划提供自动化、智能化的支撑，降低技术创新的盲目性与研发风险，提升技术机会识别的效率与准确性。
+## 项目简介
 
-## 项目功能
-- **专利数据爬取**: 支持万方专利平台的分布式爬取，企业级架构
-- **技术要素提取**: NLP技术自动提取专利中的技术要素、问题、解决方案
-- **技术热点分析**: 基于TF-IDF和聚类分析技术热点
-- **专利地图可视化**: 自动生成专利技术关联图
-- **技术机会识别**: 量化评价技术机会，识别创新空白点
-- **用户管理**: 完整的用户认证和权限管理
-- **日志监控**: 详细的爬虫运行日志和错误监控
+本项目是一个基于专利地图的技术机会发现系统，通过融合自然语言处理技术，实现专利文本的自动化解析与技术要素提取，构建技术热点关联矩阵，结合GTM算法与多维空间专利地图理论，实现专利地图的自动化生成与技术机会的可视化挖掘。同时构建多维度技术机会评价指标体系，实现创新机会的量化筛选。
 
-## 项目结构
+该系统为企业、科研机构的技术研发决策、专利布局规划提供自动化、智能化的支撑，降低技术创新的盲目性与研发风险，提升技术机会识别的效率与准确性。
+
+## 主要功能
+
+- **专利数据爬取**: 支持万方专利平台的分布式爬取，采用企业级架构
+- **技术要素提取**: 使用NLP技术自动提取专利中的技术要素、问题描述和解决方案
+- **技术热点分析**: 基于TF-IDF和聚类分析识别技术热点
+- **专利地图可视化**: 自动生成专利技术关联图，支持交互式可视化
+- **技术机会识别**: 量化评价技术机会，识别创新空白点和潜在机会
+- **用户管理系统**: 完整的用户认证和权限管理
+- **日志监控系统**: 详细的爬虫运行日志和错误监控功能
+
+## 项目架构
+
 ```
 lfq_hbut/
-├─backend/          # Python 后端包
-│   ├─configs.py    # 配置文件
-│   ├─Item_models.py # 数据模型
-│   ├─main.py       # 爬虫测试脚本
-│   ├─web.py        # Flask Web应用
-│   ├─auth.py       # 用户认证
-│   ├─nlp_tools.py  # NLP分析工具
-│   ├─parse_tools.py # 数据解析工具
-│   ├─spiders/      # 爬虫模块
-│   │   ├─spider_base.py
-│   │   └─wanfangtools.py
-│   └─sql/          # 数据库相关
-├─frontend/         # Vue + Vite 前端项目
-│   ├─src/
-│   │   ├─components/
-│   │   │   ├─Dashboard.vue    # 主控制台
-│   │   │   ├─PatentsPage.vue  # 专利管理
-│   │   │   ├─AnalysisPage.vue # 技术分析
-│   │   │   ├─LoginPage.vue    # 登录页
-│   │   │   └─...其他组件
-│   │   ├─router/index.js
-│   │   └─main.js
-│   └─package.json
-├─static/           # 静态资源
-├─README.md
-└─requirements.txt
+├── backend/              # Python后端服务
+│   ├── auth.py          # 用户认证模块
+│   ├── configs.py       # 配置文件
+│   ├── gtm.py           # GTM算法实现
+│   ├── Item_models.py   # 数据模型定义
+│   ├── main.py          # 主程序入口
+│   ├── nlp.py           # NLP处理核心
+│   ├── nlp_tools.py     # NLP工具函数
+│   ├── opportunity.py   # 机会识别模块
+│   ├── parse_tools.py   # 数据解析工具
+│   ├── web.py           # Flask Web应用
+│   ├── nlp_tools/       # NLP工具资源
+│   │   └── dict.txt     # 词典文件
+│   ├── spiders/         # 爬虫模块
+│   │   ├── spider_base.py    # 爬虫基类
+│   │   └── wanfangtools.py   # 万方专利爬虫
+│   └── sql/             # 数据库相关
+│       ├── createTables.sql  # 数据库建表脚本
+│       └── sql_tools.py      # 数据库工具
+├── frontend/            # Vue前端应用
+│   ├── src/
+│   │   ├── components/  # Vue组件
+│   │   │   ├── AnalysisPage.vue    # 分析页面
+│   │   │   ├── AppHeader.vue       # 应用头部
+│   │   │   ├── Dashboard.vue       # 仪表板
+│   │   │   ├── LoginForm.vue       # 登录表单
+│   │   │   ├── LoginPage.vue       # 登录页面
+│   │   │   ├── LogsTable.vue       # 日志表格
+│   │   │   ├── PatentsPage.vue     # 专利页面
+│   │   │   ├── StatusPanel.vue     # 状态面板
+│   │   │   ├── TaskForm.vue        # 任务表单
+│   │   │   └── TasksTable.vue      # 任务表格
+│   │   ├── router/
+│   │   │   └── index.js            # 路由配置
+│   │   ├── App.vue                 # 主应用组件
+│   │   └── main.js                 # 前端入口文件
+│   ├── package.json                # 前端依赖配置
+│   └── vite.config.js              # Vite构建配置
+├── static/               # 静态资源
+│   └── index.html        # HTML模板
+├── requirements.txt      # Python依赖
+├── run.py               # 项目运行脚本
+└── README.md            # 项目说明文档
 ```
 
 ## 技术栈
-- **后端**: Python Flask + Redis + MySQL + NLP工具
-- **前端**: Vue 3 + Element Plus + ECharts
-- **爬虫**: 企业级分布式架构，支持监控和错误处理
-- **分析**: 技术要素提取、聚类分析、可视化
 
-## 安装依赖
+### 后端技术栈
 
-### Python 后端
+- **框架**: Flask (Python Web框架)
+- **数据库**: MySQL (关系型数据库)
+- **缓存**: Redis (内存数据库)
+- **NLP工具**: jieba, scikit-learn (中文分词和机器学习)
+- **爬虫框架**: Scrapy (分布式爬虫)
+
+### 前端技术栈
+
+- **框架**: Vue 3 (渐进式JavaScript框架)
+- **构建工具**: Vite (快速构建工具)
+- **UI组件库**: Element Plus (Vue 3组件库)
+- **图表库**: ECharts (数据可视化)
+
+### 其他技术
+
+- **容器化**: Docker (可选，用于部署)
+- **版本控制**: Git
+- **包管理**: pip (Python), npm (Node.js)
+
+## 环境要求
+
+- Python 3.8+
+- Node.js 16+
+- MySQL 8.0+
+- Redis 6.0+
+
+## 安装指南
+
+### 1. 克隆项目
+
+```bash
+git clone <repository-url>
+cd lfq_hbut
+```
+
+### 2. 后端环境配置
+
+#### 安装Python依赖
 ```bash
 pip install -r requirements.txt
 ```
 
-### 前端 Vue 项目
+#### 配置数据库
+
+1. 安装并启动MySQL服务
+2. 创建数据库：
+
+```sql
+CREATE DATABASE patent_system CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+3. 运行建表脚本：
+
+```bash
+mysql -u username -p patent_system < backend/sql/createTables.sql
+```
+
+#### 配置Redis
+
+确保Redis服务正在运行（默认端口6379）
+
+#### 修改配置文件
+
+编辑 `backend/configs.py` 文件，配置数据库连接信息：
+
+```python
+# 数据库配置
+DB_CONFIG = {
+    'host': 'localhost',
+    'user': 'your_username',
+    'password': 'your_password',
+    'database': 'patent_system'
+}
+
+# Redis配置
+REDIS_CONFIG = {
+    'host': 'localhost',
+    'port': 6379,
+    'db': 0
+}
+```
+
+### 3. 前端环境配置
+
+#### 安装Node.js依赖
 ```bash
 cd frontend
 npm install
-npm run dev        # 开发模式，访问 http://localhost:3000
-npm run build      # 生产构建，输出到 ../static/dist
 ```
 
 ## 运行项目
 
-### 1. 启动后端服务
+### 开发环境运行
+
+#### 1. 启动后端服务
 ```bash
+# 从项目根目录
+python run.py
+# 或者
 python -m backend.web
-# 或
-python backend/main.py  # 如果有启动脚本
 ```
 
-### 2. 启动前端开发服务器
+后端服务将在 http://localhost:5000 启动
+
+#### 2. 启动前端开发服务器
 ```bash
 cd frontend
 npm run dev
 ```
 
-### 3. 访问系统
-打开浏览器访问 http://localhost:5000
+前端开发服务器将在 http://localhost:3000 启动
 
-## 数据库初始化
-项目使用MySQL数据库，首次运行需要创建表结构：
-```sql
--- 运行 backend/sql/createTables.sql 中的SQL语句
+#### 3. 访问应用
+
+打开浏览器访问 http://localhost:3000
+
+### 生产环境部署
+
+#### 构建前端
+
+```bash
+cd frontend
+npm run build
 ```
 
-## 系统功能说明
+构建后的文件将输出到 `../static/dist` 目录
 
-### 控制台
-- 实时监控爬虫状态
-- 启动/停止爬虫线程
-- 查看队列状态
-- 管理搜索任务
+#### 启动生产服务器
 
-### 专利管理
-- 浏览已爬取的专利数据
+```bash
+python run.py --prod
+```
+
+## 使用说明
+
+### 系统功能概述
+
+1. **用户登录**: 使用管理员账号登录系统
+2. **仪表板**: 查看系统状态、爬虫运行情况和任务队列
+3. **专利管理**: 浏览和管理已爬取的专利数据
+4. **技术分析**: 进行技术要素提取、热点分析和机会识别
+5. **日志监控**: 查看系统运行日志和错误信息
+
+### 核心功能使用
+
+#### 专利数据爬取
+
+- 在仪表板中配置爬取任务
+- 设置搜索关键词和时间范围
+- 启动分布式爬虫进行数据采集
+
+#### 技术要素提取
+
+- 上传专利文本或选择已爬取数据
+- 系统自动提取技术要素、问题和解决方案
+- 查看提取结果的可视化展示
+
+#### 专利地图生成
+
+- 基于提取的技术要素生成专利关联图
+- 支持交互式浏览和筛选
+- 导出地图数据用于进一步分析
+
+#### 技术机会识别
+
+- 基于专利地图识别技术空白点
+- 量化评价潜在创新机会
+- 生成机会报告和建议
+
+## API文档
+
+系统提供RESTful API接口，主要端点包括：
+
+- `POST /api/auth/login` - 用户登录
+- `GET /api/patents` - 获取专利列表
+- `POST /api/analysis/extract` - 技术要素提取
+- `GET /api/analysis/map` - 获取专利地图数据
+- `POST /api/tasks/start` - 启动爬虫任务
+
+详细API文档请参考后端代码中的路由定义。
+
+## 开发指南
+
+### 代码规范
+
+- 后端遵循PEP 8 Python代码规范
+- 前端遵循Vue.js官方风格指南
+- 使用ESLint和Prettier进行代码格式化
+
+### 测试
+
+```bash
+# 后端测试
+python -m pytest backend/
+
+# 前端测试
+cd frontend
+npm run test
+```
+
+### 贡献
+
+1. Fork本项目
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 创建Pull Request
+
+## 许可证
+
+本项目采用MIT许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
+
+## 联系方式
+
+项目维护者: [您的姓名]
+邮箱: [您的邮箱]
+项目主页: [项目GitHub地址]
+
+## 更新日志
+
+### v1.0.0 (2024-01-XX)
+
+- 初始版本发布
+- 实现基础专利爬取和NLP分析功能
+- 支持专利地图可视化和机会识别
+
+---
+
+*本项目为学术研究项目，如有问题或建议欢迎提交Issue或Pull Request。*
 - 查看专利详情
 - 支持关键词搜索和筛选
 

@@ -7,20 +7,32 @@
             <User/>
           </el-icon>
           <h2>专利分析系统</h2>
-          <p>请登录您的账户</p>
+          <p>{{ isLogin ? '请登录您的账户' : '请注册新账户' }}</p>
         </div>
       </template>
-      <LoginForm @login="handleLogin"/>
+      <LoginForm v-if="isLogin" @login="handleLogin"/>
+      <RegisterForm v-else @register="handleRegister"/>
+      <div style="text-align: center; margin-top: 20px;">
+        <el-button type="text" @click="isLogin = !isLogin">
+          {{ isLogin ? '没有账户？点击注册' : '已有账户？点击登录' }}
+        </el-button>
+      </div>
     </el-card>
   </div>
 </template>
 <script>
 import LoginForm from './LoginForm.vue'
+import RegisterForm from './RegisterForm.vue'
 import axios from 'axios'
 import {User} from '@element-plus/icons-vue'
 
 export default {
-  components: {LoginForm, User},
+  components: {LoginForm, RegisterForm, User},
+  data() {
+    return {
+      isLogin: true
+    }
+  },
   methods: {
     async handleLogin(creds) {
       try {
@@ -29,6 +41,15 @@ export default {
         this.$router.push('/dashboard')
       } catch (e) {
         this.$message.error('登录失败')
+      }
+    },
+    async handleRegister(creds) {
+      try {
+        const response = await axios.post('/api/register', creds)
+        this.$message.success(response.data.message)
+        this.isLogin = true  // 注册成功后切换到登录
+      } catch (e) {
+        this.$message.error(e.response?.data?.error || '注册失败')
       }
     }
   }

@@ -39,6 +39,22 @@ def init_user_table():
     db.close()
 
 
+def register_user(username, password):
+    db = MysqlUtils(host=MysqlConfig.host, port=MysqlConfig.port,
+                    user=MysqlConfig.user, password=MysqlConfig.password,
+                    database=MysqlConfig.database, charset=MysqlConfig.charset)
+    # check if user exists
+    existing = db.select('users', '*', condition='username=%s', params=(username,), fetch_one=True)
+    if existing:
+        db.close()
+        return False, '用户名已存在'
+    # create user
+    pwd_hash = generate_password_hash(password)
+    db.insert('users', {'username': username, 'password': pwd_hash})
+    db.close()
+    return True, '注册成功'
+
+
 @login_manager.user_loader
 def load_user(user_id):
     db = MysqlUtils(host=MysqlConfig.host, port=MysqlConfig.port,

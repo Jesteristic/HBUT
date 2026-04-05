@@ -4,6 +4,7 @@ from threading import Lock
 
 import loguru
 from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
 from flask_login import login_user, logout_user, login_required, current_user
 
 from .auth import login_manager, init_user_table, User
@@ -20,6 +21,8 @@ if not os.path.exists(static_dir):
 else:
     loguru.logger.info(f"Serving frontend from {static_dir}")
 app = Flask(__name__, static_folder=static_dir, static_url_path='')
+app.secret_key = 'your_secret_key_here'  # 设置Flask secret key
+CORS(app)  # 启用CORS
 
 redis = RedisUtils()
 mysql = MysqlUtils(host=MysqlConfig.host, port=MysqlConfig.port,
@@ -35,7 +38,6 @@ login_manager.init_app(app)
 def init_database_tables():
     """初始化数据库表"""
     # 读取createTables.sql文件
-    import os
     sql_path = os.path.join(os.path.dirname(__file__), 'sql', 'createTables.sql')
     with open(sql_path, 'r', encoding='utf-8') as f:
         sql_content = f.read()
@@ -205,6 +207,24 @@ def api_login():
         return jsonify({'error': 'invalid credential'}), 401
     login_user(user)
     return jsonify({'ok': True})
+
+
+@app.route('/api/register', methods=['POST'])
+def api_register():
+    data = request.get_json() or {}
+    username = data.get('username')
+    password = data.get('password')
+    if not username or not password:
+        return jsonify({'error': 'username and password required'}), 400
+    # check if user exists
+    existing = mysql.select('users', '*', condition='username=%s', params=(username,), fetch_one=True)
+    if existing:
+        return jsonify({'error': '用户名已存在'}), 400
+    # create user
+    from werkzeug.security import generate_password_hash
+    pwd_hash = generate_password_hash(password)
+    mysql.insert('users', {'username': username, 'password': pwd_hash})
+    return jsonify({'ok': True, 'message': '注册成功'})
 
 @app.route('/api/logout')
 @login_required
