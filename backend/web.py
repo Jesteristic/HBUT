@@ -1,15 +1,25 @@
-from flask import Flask, request, jsonify, send_from_directory
 import json
-from flask_login import login_user, logout_user, login_required, current_user
-from .sql.sql_tools import RedisUtils, MysqlUtils
-from .configs import MysqlConfig, CrawlerConfig
-from .spiders.wanfangtools import WanfangPatentProducer, WanfangPatentComsumer
-from .auth import login_manager, init_user_table, User
-from .nlp_tools import extract_technical_elements, create_patent_map_image, analyze_technology_opportunities
+import os
 from threading import Lock
 
-# 将静态目录指向可能的构建输出
-app = Flask(__name__, static_folder='../static/dist', static_url_path='')
+import loguru
+from flask import Flask, request, jsonify, send_from_directory
+from flask_login import login_user, logout_user, login_required, current_user
+
+from .auth import login_manager, init_user_table, User
+from .configs import MysqlConfig, CrawlerConfig
+from .nlp_tools import extract_technical_elements, create_patent_map_image, analyze_technology_opportunities
+from .spiders.wanfangtools import WanfangPatentProducer, WanfangPatentComsumer
+from .sql.sql_tools import RedisUtils, MysqlUtils
+
+# 将静态目录优先指向前端构建输出 static/dist，fallback 到 static
+static_dir = os.path.join(os.path.dirname(__file__), '..', 'static', 'dist')
+if not os.path.exists(static_dir):
+    static_dir = os.path.join(os.path.dirname(__file__), '..', 'static')
+    loguru.logger.warning(f"static/dist not found, fallback to {static_dir}")
+else:
+    loguru.logger.info(f"Serving frontend from {static_dir}")
+app = Flask(__name__, static_folder=static_dir, static_url_path='')
 
 redis = RedisUtils()
 mysql = MysqlUtils(host=MysqlConfig.host, port=MysqlConfig.port,
@@ -52,7 +62,7 @@ def protect_frontend():
     # if not logged in, serve SPA anyway; router will redirect to /login
     # this prevents browsing index without backend auth
     if not current_user.is_authenticated:
-        return send_from_directory('static/dist', 'index.html')
+        return send_from_directory(app.static_folder, 'index.html')
 crawler_lock = Lock()
 producers = []
 consumers = []
@@ -89,13 +99,8 @@ def stop_crawlers():
 
 @app.route('/')
 def index():
-    # 优先返回构建后前端的 index.html
-    import os
-    dist_idx = os.path.join(app.static_folder, 'index.html')
-    if os.path.exists(dist_idx):
-        return send_from_directory(app.static_folder, 'index.html')
-    # 否则返回旧版静态页面（保留教程时）
-    return send_from_directory('../static', 'index.html')
+    # 返回前端的 index.html
+    return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/<path:path>')
 def catch_all(path):
