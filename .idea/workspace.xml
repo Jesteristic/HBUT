@@ -4,37 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="946d5d05-b88b-457c-a6f0-7b900d1a7949" name="更改" comment="优化项目结构，初步完成前后端">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/9de65aa8-4f16-4a66-a3b4-d4c1a5541d84.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/9de65aa8-4f16-4a66-a3b4-d4c1a5541d84.xml" afterDir="false" />
+    <list default="true" id="946d5d05-b88b-457c-a6f0-7b900d1a7949" name="更改" comment="优化前后端">
+      <change afterPath="$PROJECT_DIR$/.idea/data_source_mapping.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/spiders/spider_base.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/spiders/spider_base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/spiders/wanfangtools.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/spiders/wanfangtools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/sql/createTables.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backend/sql/createTables.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/sql/sql_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/sql/sql_tools.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/web.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/web.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/node_modules/.package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/axios.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/axios.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/chunk-5WWUZCGV.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/chunk-5WWUZCGV.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/chunk-MVPHI6E6.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/chunk-MVPHI6E6.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/element-plus.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/element-plus.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/vue.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/vue.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/LogsTable.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/LogsTable.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/StatusPanel.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/StatusPanel.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/TaskForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/TaskForm.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vite.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -306,7 +281,7 @@
       <workItem from="1772971469673" duration="522000" />
       <workItem from="1775358300583" duration="9000" />
       <workItem from="1775360131157" duration="13000" />
-      <workItem from="1775360163728" duration="1162000" />
+      <workItem from="1775360163728" duration="3732000" />
     </task>
     <task id="LOCAL-00001" summary="优化爬虫结构为生产者-消费者">
       <option name="closed" value="true" />
@@ -340,7 +315,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772969568734</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="优化前后端">
+      <option name="closed" value="true" />
+      <created>1775361346278</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1775361346278</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -360,7 +343,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="优化爬虫结构为生产者-消费者" />
     <MESSAGE value="优化项目结构，初步完成前后端" />
-    <option name="LAST_COMMIT_MESSAGE" value="优化项目结构，初步完成前后端" />
+    <MESSAGE value="优化前后端" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化前后端" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
