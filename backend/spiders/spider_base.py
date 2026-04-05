@@ -37,9 +37,20 @@ class WangFangBase(threading.Thread):
         # 管理后台推送生产者搜索任务的 Redis 列表
         self.REDIS_PRODUCER_TASK_KEY = "wanfang:producer_tasks"
 
-        # 如果 Mysql 连接已建立，则注册日志写入 MySQL 的 sink
-        if hasattr(self, 'mysql') and self.mysql:
-            self._init_mysql_logging(self.mysql)
+    def _log_to_db(self, action: str, details: str, status: str, error_msg: str = None, patent_id: str = None):
+        """记录操作到数据库"""
+        if self.mysql:
+            try:
+                self.mysql.insert('spider_logs', {
+                    'spider_name': self.__class__.__name__,
+                    'action': action,
+                    'details': details,
+                    'status': status,
+                    'error_msg': error_msg,
+                    'patent_id': patent_id
+                })
+            except Exception as e:
+                logger.error(f"记录日志到数据库失败: {e}")
 
         # Mysql实例
         self.mysql = None

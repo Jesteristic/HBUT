@@ -58,5 +58,24 @@ CREATE TABLE spider_logs (
     log_time DATETIME,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+-- 登录用户表
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(256) UNIQUE NOT NULL,
+    password VARCHAR(256) NOT NULL
+);
+
+-- 生产者任务历史
+CREATE TABLE producer_tasks (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    keyword VARCHAR(256) NOT NULL,
+    page_size INT NOT NULL,
+    pages INT NOT NULL,
+    status VARCHAR(20) DEFAULT 'pending',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
 -- 另请注意：生产者任务存在于 Redis 列表 `wanfang:producer_tasks`，
 -- 管理页面应当向其中推送包含 keyword 和 page_size 的 JSON 字符串。

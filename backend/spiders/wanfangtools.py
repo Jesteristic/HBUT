@@ -89,6 +89,7 @@ class WanfangPatentProducer(WangFangBase):
         Returns:
             搜索结果字典，失败返回 None
         """
+        start_time = time.time()
         for attempt in range(self.config.max_retries):
             try:
                 logger.bind(keyword=keyword, page=page).debug(f"生产者000{self.producerID}:开始搜索")
@@ -97,7 +98,6 @@ class WanfangPatentProducer(WangFangBase):
                 post_data = self.construct_protobuf(keyword, page, page_size)
 
                 # 发送请求
-                start_time = time.time()
                 response = requests.post(
                     self.SEARCH_URL,
                     headers=self.headers,
@@ -116,6 +116,10 @@ class WanfangPatentProducer(WangFangBase):
                     response_data, _ = blackboxprotobuf.protobuf_to_json(response.content[5:])
                     logger.debug(f"生产者000{self.producerID}:解析成功--页码={page}, 数据长度={len(response.content)}")
 
+                    # 记录到数据库日志
+                    self._log_to_db('search', f'keyword={keyword}, page={page}', 'success',
+                                   f'duration={elapsed_time:.2f}s, data_len={len(response_data)}')
+
                     # 解析并实时推送 taskId 到 Redis
                     try:
                         task_ids = extract_task_ids(json.loads(response_data),page)
@@ -128,27 +132,34 @@ class WanfangPatentProducer(WangFangBase):
                                         f"生产者000{self.producerID}:已将 {len(task_ids)} 个 taskId 推入 Redis 列表 {self.REDIS_TASK_LIST_KEY}")
                                 except Exception as e:
                                     logger.bind(keyword=keyword, page=page).warning(f"生产者000{self.producerID}:推送 taskId 到 Redis 失败: {e}")
+                                    self._log_to_db('push_redis', f'keyword={keyword}, page={page}', 'error', str(e))
                             else:
                                 logger.warning(f"生产者000{self.producerID}:Redis 未初始化，无法推送 taskId")
                     except Exception as e:
                         logger.error(f"生产者000{self.producerID}:提取 taskId 并推送到 Redis 时出错: {e}")
+                        self._log_to_db('extract_task_ids', f'keyword={keyword}, page={page}', 'error', str(e))
                 else:
                     logger.warning(
                         f"生产者000{self.producerID}:响应数据过短: 页码--{page}, 长度={len(response.content)}")
+                    self._log_to_db('search', f'keyword={keyword}, page={page}', 'warning', 'response too short')
 
             except Exception as e:
                 logger.warning(
                     f"生产者000{self.producerID}:请求失败 (尝试 {attempt + 1}/{self.config.max_retries}): {e}")
+                self._log_to_db('search', f'keyword={keyword}, page={page}', 'error', str(e))
 
                 if attempt < self.config.max_retries - 1:
                     # 等待后重试
                     time.sleep(1 * (attempt + 1))
                 else:
                     logger.error(f"生产者000{self.producerID}--页码 {page} 请求失败，已达到最大重试次数")
+                    self._log_to_db('search', f'keyword={keyword}, page={page}', 'error', f'max retries exceeded: {e}')
                     return None
 
             # 请求间延迟
-            # time.sleep(self.config.delay_between_requests)
+            time.sleep(self.config.delay_between_requests)
+
+        return response_data if 'response_data' in locals() else None
 
     def run(self):
         """从 Redis 列表获取搜索任务并循环执行。
@@ -181,8 +192,24 @@ class WanfangPatentProducer(WangFangBase):
                 logger.warning(f"生产者000{self.producerID}:任务缺少 keyword 字段 {task}")
                 continue
 
+            # update task status in DB
+            try:
+                self.mysql.update('producer_tasks', {'status': 'running'},
+                                   condition='keyword=%s AND page_size=%s AND pages=%s AND status=%s',
+                                   condition_params=(keyword, page_size, pages, 'pending'))
+            except Exception:
+                pass
+
             for page in range(1, pages + 1):
                 self._make_request(keyword, page, page_size)
+
+            # mark completed
+            try:
+                self.mysql.update('producer_tasks', {'status': 'done'},
+                                   condition='keyword=%s AND page_size=%s AND pages=%s AND status=%s',
+                                   condition_params=(keyword, page_size, pages, 'running'))
+            except Exception:
+                pass
 
 
 class WanfangPatentComsumer(WangFangBase):

@@ -4,20 +4,37 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="946d5d05-b88b-457c-a6f0-7b900d1a7949" name="更改" comment="优化爬虫结构为生产者-消费者">
+    <list default="true" id="946d5d05-b88b-457c-a6f0-7b900d1a7949" name="更改" comment="优化项目结构，初步完成前后端">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/9de65aa8-4f16-4a66-a3b4-d4c1a5541d84.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/9de65aa8-4f16-4a66-a3b4-d4c1a5541d84.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/lfq_hbut.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/lfq_hbut.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Item_models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/configs.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql/createTables.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql/sql_tools.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/parse_tools.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/spiders/spider_base.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/spiders/wanfangtools.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/spiders/spider_base.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/spiders/spider_base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/spiders/wanfangtools.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/spiders/wanfangtools.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/sql/createTables.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backend/sql/createTables.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/sql/sql_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/sql/sql_tools.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/web.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/web.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/axios.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/axios.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/chunk-5WWUZCGV.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/chunk-5WWUZCGV.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/chunk-MVPHI6E6.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/chunk-MVPHI6E6.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/element-plus.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/element-plus.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/vue.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps_temp_9910dedc/vue.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/LogsTable.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/LogsTable.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/StatusPanel.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/StatusPanel.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/TaskForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/TaskForm.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vite.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +42,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="34" />
+    <option name="cachedIndexableFilesCount" value="50" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -33,6 +50,17 @@
         <option value="JavaScript File" />
         <option value="Python Script" />
       </list>
+    </option>
+  </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
     </option>
   </component>
   <component name="Git.Settings">
@@ -68,6 +96,7 @@
     &quot;Node.js.gen_protoc.js.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
     &quot;Python.parse_tools.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run.executor&quot;: &quot;Run&quot;,
     &quot;Python.sql_tools.executor&quot;: &quot;Run&quot;,
     &quot;Python.test_async.executor&quot;: &quot;Run&quot;,
     &quot;Python.wanfang.executor&quot;: &quot;Run&quot;,
@@ -97,6 +126,7 @@
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;ts.external.directory.path&quot;: &quot;D:\\Apps\\PyCharm 2025.3.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
+    &quot;数据库脚本.createTables.sql (1).executor&quot;: &quot;Run&quot;,
     &quot;数据库脚本.createTables.sql.executor&quot;: &quot;Run&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -108,6 +138,13 @@
     ]
   }
 }</component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings is-module-sdk="true">
+        <option name="myUseModuleSdk" value="true" />
+      </console-settings>
+    </option>
+  </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Pycharm_Projects\lfq_hbut\src" />
@@ -116,9 +153,9 @@
       <recent name="D:\Pycharm_Projects\lfq_hbut\spiders" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.web (1)">
-    <configuration name="createTables.sql" type="DatabaseScript" editBeforeRun="true" temporary="true" nameIsGenerated="true">
-      <script-file value="$PROJECT_DIR$/sql/createTables.sql" />
+  <component name="RunManager" selected="Python.main">
+    <configuration name="createTables.sql (1)" type="DatabaseScript" editBeforeRun="true" temporary="true" nameIsGenerated="true">
+      <script-file value="$PROJECT_DIR$/backend/sql/createTables.sql" />
       <script-mode>FILE</script-mode>
       <data-source id="9de65aa8-4f16-4a66-a3b4-d4c1a5541d84" />
       <method v="2" />
@@ -147,7 +184,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="wanfangtools" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="run" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="lfq_hbut" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -156,13 +193,13 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/spiders" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="RUN_TOOL" value="" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/spiders/wanfangtools.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -221,11 +258,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.run" />
         <item itemvalue="Python.web (1)" />
         <item itemvalue="Python.web" />
-        <item itemvalue="数据库脚本.createTables.sql" />
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.wanfangtools" />
       </list>
     </recent_temporary>
   </component>
@@ -264,6 +300,13 @@
       <workItem from="1772961281394" duration="1564000" />
       <workItem from="1772963102720" duration="32000" />
       <workItem from="1772965429512" duration="1282000" />
+      <workItem from="1772969486174" duration="131000" />
+      <workItem from="1772970086888" duration="605000" />
+      <workItem from="1772971030071" duration="421000" />
+      <workItem from="1772971469673" duration="522000" />
+      <workItem from="1775358300583" duration="9000" />
+      <workItem from="1775360131157" duration="13000" />
+      <workItem from="1775360163728" duration="1162000" />
     </task>
     <task id="LOCAL-00001" summary="优化爬虫结构为生产者-消费者">
       <option name="closed" value="true" />
@@ -289,7 +332,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772946332685</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="优化项目结构，初步完成前后端">
+      <option name="closed" value="true" />
+      <created>1772969568734</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1772969568734</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -308,7 +359,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="优化爬虫结构为生产者-消费者" />
-    <option name="LAST_COMMIT_MESSAGE" value="优化爬虫结构为生产者-消费者" />
+    <MESSAGE value="优化项目结构，初步完成前后端" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化项目结构，初步完成前后端" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

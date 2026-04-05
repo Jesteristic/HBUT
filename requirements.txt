@@ -5,3 +5,25 @@ dbutils
 loguru
 curl-cffi
 blackboxprotobuf
+
+flask-login
+werkzeug
+
+# NLP and ML
+transformers
+torch
+scikit-learn
+pandas
+numpy
+matplotlib
+seaborn
+plotly
+networkx
+jieba
+wordcloud
+
+torch
+transformers
+scikit-learn
+matplotlib
+pandas

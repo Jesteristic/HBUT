@@ -381,6 +381,10 @@ class MysqlUtils:
         if hasattr(self, 'pool'):
             self.pool.close()
 
+    def close(self):
+        conn = self.get_connection()
+        conn.close()
+
     def __enter__(self):
         return self
 
