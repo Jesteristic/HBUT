@@ -1,19 +1,16 @@
 <template>
   <div class="page-container">
-    <el-container style="height:100vh;">
-      <AppHeader/>
-      <el-main class="page-main">
-        <el-row :gutter="20">
-          <el-col :span="24">
-            <el-card class="main-card" shadow="hover">
-              <template #header>
-                <div class="card-header">
-                  <el-icon>
-                    <DataAnalysis/>
-                  </el-icon>
-                  <span>技术分析</span>
-                </div>
-              </template>
+    <el-row :gutter="20">
+      <el-col :span="24">
+        <el-card class="main-card" shadow="hover">
+          <template #header>
+            <div class="card-header">
+              <el-icon>
+                <DataAnalysis/>
+              </el-icon>
+              <span>技术分析</span>
+            </div>
+          </template>
               <el-tabs v-model="activeTab" type="border-card">
                 <el-tab-pane label="技术要素提取" name="elements">
                   <el-form class="filter-form" inline>
@@ -134,37 +131,48 @@
                         识别技术机会
                       </el-button>
                     </el-form-item>
+                    <el-form-item>
+                      <el-button :disabled="!opportunities.length" type="success" @click="exportOpportunities">
+                        <el-icon>
+                          <Download/>
+                        </el-icon>
+                        导出报告
+                      </el-button>
+                    </el-form-item>
                   </el-form>
                   <el-table :data="opportunities" :header-cell-style="{background:'#f5f7fa', color:'#606266'}" stripe
                             style="width: 100%; margin-top:20px;">
-                    <el-table-column label="技术领域" min-width="150" prop="technology"></el-table-column>
-                    <el-table-column align="center" label="机会评分" prop="opportunity_score" width="120">
+                    <el-table-column label="专利标题" min-width="200" prop="title"></el-table-column>
+                    <el-table-column align="center" label="机会评分" prop="score" width="120">
                       <template #default="{ row }">
-                        <el-tag :type="row.opportunity_score > 5 ? 'success' : 'warning'">{{
-                            row.opportunity_score
-                          }}
+                        <el-tag
+                            :type="row.level === 'High' ? 'success' : row.level === 'Medium' ? 'warning' : 'danger'">
+                          {{ row.score.toFixed(1) }} ({{ row.level }})
                         </el-tag>
                       </template>
                     </el-table-column>
-                    <el-table-column label="原因" min-width="200" prop="reason"></el-table-column>
+                    <el-table-column label="建议" min-width="300">
+                      <template #default="{ row }">
+                        <div v-for="rec in row.recommendations" :key="rec" class="recommendation-item">
+                          {{ rec }}
+                        </div>
+                      </template>
+                    </el-table-column>
                   </el-table>
                 </el-tab-pane>
               </el-tabs>
             </el-card>
           </el-col>
         </el-row>
-      </el-main>
-    </el-container>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import AppHeader from './AppHeader.vue'
-import {Check, DataAnalysis, Lightning, Opportunity, Picture, Star, Warning} from '@element-plus/icons-vue'
+import {Check, DataAnalysis, Download, Lightning, Opportunity, Picture, Star, Warning} from '@element-plus/icons-vue'
 
 export default {
-  components: {AppHeader, DataAnalysis, Lightning, Warning, Check, Star, Picture, Opportunity},
+  components: {DataAnalysis, Lightning, Warning, Check, Star, Picture, Opportunity},
   data() {
     return {
       activeTab: 'elements',
@@ -215,6 +223,25 @@ export default {
         this.$message.success('技术机会识别完成')
       })
     },
+    exportOpportunities() {
+      if (!this.opportunities.length) {
+        this.$message.warning('没有数据可导出')
+        return
+      }
+      axios.post('/api/patents/export', {
+        data: this.opportunities,
+        type: 'opportunities'
+      }, {responseType: 'blob'}).then(r => {
+        const url = window.URL.createObjectURL(new Blob([r.data]))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', '技术机会报告.xlsx')
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        this.$message.success('报告导出成功')
+      })
+    },
     getPatentTitle(id) {
       const patent = this.patents.find(p => p.id === id)
       return patent ? patent.title : '未知专利'
@@ -225,13 +252,9 @@ export default {
 
 <style scoped>
 .page-container {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-}
-
-.page-main {
-  background: #f5f7fa;
   padding: 20px;
+  background: #f5f7fa;
+  min-height: 100vh;
 }
 
 .main-card {
@@ -279,5 +302,14 @@ export default {
   max-width: 100%;
   border-radius: 8px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.recommendation-item {
+  margin-bottom: 4px;
+  padding: 4px 8px;
+  background: #f0f9ff;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #409eff;
 }
 </style>

@@ -1,4 +1,5 @@
-CREATE TABLE patent_basic (
+CREATE TABLE IF NOT EXISTS patent_basic
+(
     id BIGINT PRIMARY KEY AUTO_INCREMENT,          -- 自增主键
     patent_internal_id VARCHAR(255) UNIQUE,        -- 接口中的唯一标识，如 'ZL_CN202511610595.7_CN121241842A_20260102'
     application_number VARCHAR(50) UNIQUE NOT NULL, -- 申请号，如 'CN202511610595.7' (对应JSON中的 "3")
@@ -19,13 +20,15 @@ CREATE TABLE patent_basic (
     INDEX idx_applicant (applicant(100)),          -- 前缀索引，因为可能较长
     INDEX idx_country (country_code)
 );
-CREATE TABLE inventor (
+CREATE TABLE IF NOT EXISTS inventor
+(
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,                    -- 发明人姓名
     UNIQUE KEY uk_inventor_name (name)
 );
 
-CREATE TABLE patent_inventor_rel (
+CREATE TABLE IF NOT EXISTS patent_inventor_rel
+(
     patent_id BIGINT NOT NULL,                     -- 关联 patent_basic.id
     inventor_id INT NOT NULL,                      -- 关联 inventor.id
     display_order INT DEFAULT 0,                   -- 发明人顺序
@@ -33,7 +36,8 @@ CREATE TABLE patent_inventor_rel (
     FOREIGN KEY (patent_id) REFERENCES patent_basic(id) ON DELETE CASCADE,
     FOREIGN KEY (inventor_id) REFERENCES inventor(id) ON DELETE CASCADE
 );
-CREATE TABLE patent_full_text (
+CREATE TABLE IF NOT EXISTS patent_full_text
+(
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     patent_id BIGINT UNIQUE NOT NULL,              -- 关联 patent_basic.id
     abstract LONGTEXT,                             -- 专利摘要 (对应JSON中的 "12"，可能需要合并数组为字符串)
@@ -43,7 +47,8 @@ CREATE TABLE patent_full_text (
 );
 
 -- 爬虫日志表
-CREATE TABLE spider_logs (
+CREATE TABLE IF NOT EXISTS spider_logs
+(
     id INT AUTO_INCREMENT PRIMARY KEY,
     spider_name VARCHAR(100) NOT NULL,
     action VARCHAR(50) NOT NULL,
@@ -60,19 +65,23 @@ CREATE TABLE spider_logs (
 );
 
 -- 登录用户表
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users
+(
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(256) UNIQUE NOT NULL,
-    password VARCHAR(256) NOT NULL
+    password VARCHAR(256) NOT NULL,
+    role     VARCHAR(20)  NOT NULL DEFAULT 'user'
 );
 
 -- 生产者任务历史
-CREATE TABLE producer_tasks (
+CREATE TABLE IF NOT EXISTS producer_tasks
+(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     keyword VARCHAR(256) NOT NULL,
     page_size INT NOT NULL,
     pages INT NOT NULL,
     status VARCHAR(20) DEFAULT 'pending',
+    queue_order INT DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

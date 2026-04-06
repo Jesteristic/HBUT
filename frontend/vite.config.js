@@ -6,16 +6,23 @@ export default defineConfig({
   plugins: [vue()],
   build: {
     outDir: '../static/dist',
-    emptyOutDir: true,
-    rollupOptions: {
-      input: 'src/main.js'
-    }
+      emptyOutDir: true
   },
   server: {
       host: '0.0.0.0',
       port: 3000,
       proxy: {
-      '/api': 'http://localhost:5000'
-    }
+          '/api': {
+              target: 'http://localhost:5000',
+              changeOrigin: true,
+              secure: false,
+              configure: (proxy, options) => {
+                  proxy.on('proxyReq', (proxyReq, req, res) => {
+                      proxyReq.setHeader('Cookie', req.headers.cookie || '');
+                  });
+              }
+          }
+      },
+      historyApiFallback: true
   }
 })

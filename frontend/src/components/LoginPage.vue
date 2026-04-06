@@ -7,13 +7,19 @@
             <User/>
           </el-icon>
           <h2>专利分析系统</h2>
-          <p>{{ isLogin ? '请登录您的账户' : '请注册新账户' }}</p>
+          <p>{{ isLogin ? '请选择登录类型并登录' : '请注册新账户' }}</p>
         </div>
       </template>
-      <LoginForm v-if="isLogin" @login="handleLogin"/>
-      <RegisterForm v-else @register="handleRegister"/>
+      <div class="login-type-switch">
+        <el-radio-group v-model="loginType" size="large">
+          <el-radio-button value="user">用户登录</el-radio-button>
+          <el-radio-button value="admin">管理员登录</el-radio-button>
+        </el-radio-group>
+      </div>
+      <LoginForm v-if="isLogin" ref="loginForm" @login="handleLogin"/>
+      <RegisterForm v-if="!isLogin && loginType === 'user'" @register="handleRegister"/>
       <div style="text-align: center; margin-top: 20px;">
-        <el-button type="text" @click="isLogin = !isLogin">
+        <el-button type="link" @click="isLogin = !isLogin">
           {{ isLogin ? '没有账户？点击注册' : '已有账户？点击登录' }}
         </el-button>
       </div>
@@ -25,22 +31,113 @@ import LoginForm from './LoginForm.vue'
 import RegisterForm from './RegisterForm.vue'
 import axios from 'axios'
 import {User} from '@element-plus/icons-vue'
+import {inject} from 'vue'
 
 export default {
   components: {LoginForm, RegisterForm, User},
   data() {
     return {
-      isLogin: true
+      isLogin: true,
+      loginType: 'user'
+    }
+  },
+  setup() {
+    const authStore = inject('authStore')
+    return {
+      authStore
     }
   },
   methods: {
-    async handleLogin(creds) {
+    async handleLogin(creds, retryCount = 0) {
+      const maxRetries = 3
+      const retryDelay = 1000 * (retryCount + 1) // 递增延迟
+
       try {
-        await axios.post('/api/login', creds)
-        // redirect to dashboard after successful login
-        this.$router.push('/dashboard')
+        console.log(`发送登录请求 (尝试 ${retryCount + 1}/${maxRetries + 1}):`, {...creds, loginType: this.loginType})
+
+        // 显示加载状态
+        const loading = this.$loading({
+          lock: true,
+          text: '正在登录...',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
+
+        // 使用authStore的login方法，确保状态同步
+        const response = await this.authStore.login({...creds, loginType: this.loginType})
+
+        loading.close()
+        console.log('登录响应:', response)
+
+        if (response.ok) {
+          console.log('登录成功，开始跳转...')
+          this.$message.success('登录成功！')
+
+          // 登录成功，保存凭据到localStorage用于自动填充
+          if (creds.remember) {
+            localStorage.setItem('savedUsername', creds.username)
+            localStorage.setItem('savedPassword', creds.password)
+            localStorage.setItem('loginType', this.loginType)
+          }
+
+          console.log('authStore状态已更新，准备跳转')
+          console.log('当前authStore状态:', {
+            isAuthenticated: this.authStore.isAuthenticated,
+            loginType: this.authStore.loginType,
+            lastCheck: this.authStore.lastCheck
+          })
+
+          // 立即跳转，因为authStore状态已经同步更新
+          if (this.loginType === 'admin') {
+            console.log('跳转到管理员页面')
+            this.$router.push('/admin')
+          } else {
+            console.log('跳转到专利页面')
+            this.$router.push('/patents')
+          }
+
+        } else {
+          loading.close()
+          console.log('登录失败:', response)
+          const errorMsg = response.error || '登录失败'
+          this.$message.error(errorMsg)
+
+          // 如果是服务器错误且未达到最大重试次数，自动重试
+          if (response.status >= 500 && retryCount < maxRetries) {
+            console.log(`服务器错误，${retryDelay}ms后重试...`)
+            this.$message.warning(`连接服务器失败，${retryDelay / 1000}秒后自动重试...`)
+            setTimeout(() => {
+              this.handleLogin(creds, retryCount + 1)
+            }, retryDelay)
+          }
+        }
       } catch (e) {
-        this.$message.error('登录失败')
+        // 隐藏加载状态
+        this.$loading?.close?.()
+
+        console.error('登录错误:', e)
+        const errorMsg = e.response?.data?.error || e.message || '网络错误'
+
+        // 处理不同类型的错误
+        if (e.code === 'NETWORK_ERROR' || !navigator.onLine) {
+          this.$message.error('网络连接失败，请检查网络连接')
+        } else if (e.response?.status === 429) {
+          this.$message.error('请求过于频繁，请稍后再试')
+        } else if (e.response?.status >= 500) {
+          // 服务器错误，自动重试
+          if (retryCount < maxRetries) {
+            console.log(`服务器错误，${retryDelay}ms后重试...`)
+            this.$message.warning(`服务器错误，${retryDelay / 1000}秒后自动重试...`)
+            setTimeout(() => {
+              this.handleLogin(creds, retryCount + 1)
+            }, retryDelay)
+            return
+          } else {
+            this.$message.error('服务器暂时不可用，请稍后重试')
+          }
+        } else {
+          this.$message.error(`登录失败: ${errorMsg}`)
+        }
       }
     },
     async handleRegister(creds) {
@@ -51,6 +148,25 @@ export default {
       } catch (e) {
         this.$message.error(e.response?.data?.error || '注册失败')
       }
+    }
+  },
+  mounted() {
+    // 自动填充记住的凭据
+    const savedUsername = localStorage.getItem('savedUsername')
+    const savedPassword = localStorage.getItem('savedPassword')
+    const savedLoginType = localStorage.getItem('loginType')
+
+    this.$nextTick(() => {
+      const loginForm = this.$refs.loginForm
+      if (loginForm && savedUsername && savedPassword) {
+        loginForm.form.username = savedUsername
+        loginForm.form.password = savedPassword
+        loginForm.form.remember = true
+      }
+    })
+
+    if (savedLoginType) {
+      this.loginType = savedLoginType
     }
   }
 }

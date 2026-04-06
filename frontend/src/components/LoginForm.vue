@@ -7,6 +7,9 @@
       <el-form-item label="密码">
         <el-input v-model="form.password" type="password"></el-input>
       </el-form-item>
+      <el-form-item>
+        <el-checkbox v-model="form.remember">记住我</el-checkbox>
+      </el-form-item>
       <el-form-item style="text-align:right;">
         <el-button type="primary" @click="submit">登录</el-button>
       </el-form-item>
@@ -17,7 +20,7 @@
 export default {
   data() {
     return {
-      form: {username: '', password: ''}
+      form: {username: '', password: '', remember: false}
     }
   },
   methods: {

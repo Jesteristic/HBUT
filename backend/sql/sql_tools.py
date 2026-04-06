@@ -125,7 +125,7 @@ class MysqlUtils:
             data: 数据字典
 
         Returns:
-            插入的行数
+            插入的记录ID（如果可用），否则受影响的行数
         """
         if not data:
             return 0
@@ -134,8 +134,19 @@ class MysqlUtils:
         placeholders = ', '.join(['%s'] * len(data))
         sql = f"INSERT INTO {table} ({columns}) VALUES ({placeholders})"
 
-        return self.execute_update(sql, tuple(data.values()))
-
+        conn = self.get_connection()
+        try:
+            cursor = conn.cursor()
+            cursor.execute(sql, tuple(data.values()))
+            conn.commit()
+            return cursor.lastrowid if cursor.lastrowid else cursor.rowcount
+        except Error as e:
+            conn.rollback()
+            logger.error(f"Error inserting into {table}: {e}")
+            raise
+        finally:
+            cursor.close()
+            conn.close()
     def batch_insert(self, table, data_list):
         """
         批量插入数据
@@ -494,6 +505,17 @@ class RedisUtils:
             return True
         except RedisError as e:
             print(f"Error adding to set in Redis: {e}")
+            return False
+        finally:
+            conn.close()
+
+    def sismember(self, key, member):
+        """检查成员是否在Set中"""
+        conn = self.get_connection()
+        try:
+            return conn.sismember(key, member)
+        except RedisError as e:
+            print(f"Error checking set membership in Redis: {e}")
             return False
         finally:
             conn.close()

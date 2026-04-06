@@ -3,6 +3,7 @@ NLP工具模块 - 专利文本分析
 """
 import base64
 import logging
+import os
 import re
 from io import BytesIO
 from typing import List, Dict, Any
@@ -22,7 +23,8 @@ class PatentNLPAnalyzer:
     def __init__(self):
         # 使用jieba进行中文分词
         try:
-            jieba.load_userdict('dict.txt')  # 假设dict.txt在backend目录下
+            dict_path = os.path.join(os.path.dirname(__file__), 'nlp_tools', 'dict.txt')
+            jieba.load_userdict(dict_path)
         except FileNotFoundError:
             logger.warning("自定义词典文件dict.txt未找到，使用默认分词")
 

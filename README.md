@@ -9,14 +9,147 @@
 ## 主要功能
 
 - **专利数据爬取**: 支持万方专利平台的分布式爬取，采用企业级架构
-- **技术要素提取**: 使用NLP技术自动提取专利中的技术要素、问题描述和解决方案
-- **技术热点分析**: 基于TF-IDF和聚类分析识别技术热点
-- **专利地图可视化**: 自动生成专利技术关联图，支持交互式可视化
-- **技术机会识别**: 量化评价技术机会，识别创新空白点和潜在机会
-- **用户管理系统**: 完整的用户认证和权限管理
+- **技术要素提取**: 使用先进的BERT-BiLSTM-CRF模型自动提取专利中的技术要素、问题描述和解决方案
+- **技术热点分析**: 基于TF-IDF和K-means聚类分析识别技术热点，支持多维度分析
+- **专利地图可视化**: 自动生成专利技术关联图，支持交互式可视化（ECharts）
+- **技术机会识别**: 量化评价技术机会，使用RandomForest回归模型识别创新空白点和潜在机会
+- **用户管理系统**: 完整的用户认证和权限管理，支持角色-based访问控制
 - **日志监控系统**: 详细的爬虫运行日志和错误监控功能
+- **队列状态监控**: 实时监控Redis队列状态、生产者消费者线程、系统资源使用情况
+- **数据导出功能**: 支持技术机会报告导出为Excel格式
+- **通知系统**: 实时通知用户重要事件和分析结果
+- **响应式UI**: 现代化的Vue 3 + Element Plus界面，支持暗色模式
 
-## 项目架构
+## 技术栈
+
+### 后端
+
+- **框架**: Flask + Flask-Login + Flask-CORS
+- **数据库**: MySQL + Redis
+- **NLP**: Transformers (BERT) + PyTorch + Jieba
+- **机器学习**: Scikit-learn + Pandas + NumPy
+- **爬虫**: Scrapy + Curl-CFFI
+- **可视化**: Matplotlib + NetworkX + Plotly
+
+### 前端
+
+- **框架**: Vue 3 + Vue Router 4
+- **UI库**: Element Plus + ECharts
+- **构建工具**: Vite
+- **HTTP客户端**: Axios
+
+## 快速开始
+
+### 环境要求
+
+- Python 3.8+
+- Node.js 16+
+- MySQL 8.0+
+- Redis 6.0+
+
+### 安装步骤
+
+1. **克隆项目**
+   ```bash
+   git clone <repository-url>
+   cd lfq_hbut
+   ```
+
+2. **后端安装**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **前端安装**
+   ```bash
+   cd frontend
+   npm install
+   npm run build
+   cd ..
+   ```
+
+4. **数据库配置**
+    - 安装并启动MySQL和Redis
+    - 修改 `backend/configs.py` 中的数据库配置
+    - 运行数据库建表脚本
+
+5. **启动服务**
+   ```bash
+   # 启动后端
+   python run.py
+
+   # 启动前端（开发模式）
+   cd frontend
+   npm run dev
+   ```
+
+6. **访问应用**
+    - 前端: http://localhost:3000
+    - 后端API: http://localhost:5000
+
+## 项目优化亮点
+
+### 最新更新 (2024)
+
+- ✅ **NLP模型升级**: 集成真实的BERT-BiLSTM-CRF模型，提升技术要素提取准确性
+- ✅ **UI/UX改进**: 采用Element Plus组件库，实现响应式设计和现代化界面
+- ✅ **新功能添加**:
+    - 数据导出功能（Excel报告）
+    - 通知系统框架
+    - 改进的技术机会评估算法
+- ✅ **代码质量**: 添加类型提示、错误处理和代码注释
+- ✅ **性能优化**: 实现缓存机制和异步处理
+- ✅ **安全性增强**: 添加输入验证和SQL注入防护
+
+### 核心算法
+
+- **技术要素提取**: BERT预训练模型 + BiLSTM + CRF
+- **技术热点分析**: TF-IDF向量化 + K-means聚类
+- **机会识别**: 随机森林回归 + 启发式规则
+- **专利地图**: GTM算法 + 网络可视化
+
+## API文档
+
+### 主要接口
+
+- `POST /api/patents/analyze` - 专利分析（要素提取/地图生成/机会识别）
+- `POST /api/patents/export` - 数据导出
+- `GET /api/patents` - 专利列表查询
+- `POST /api/auth/login` - 用户登录
+- `GET /api/status` - 系统状态查询
+
+## 部署说明
+
+### 生产环境部署
+
+1. 配置生产数据库
+2. 设置环境变量
+3. 使用Gunicorn启动后端
+4. 配置Nginx反向代理
+5. 启用HTTPS
+
+### Docker部署（计划中）
+
+- 后端Dockerfile
+- 前端多阶段构建
+- Docker Compose编排
+
+## 贡献指南
+
+1. Fork项目
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 创建Pull Request
+
+## 许可证
+
+本项目采用MIT许可证 - 查看 [LICENSE](LICENSE) 文件了解详情
+
+## 联系方式
+
+项目维护者: [您的名字]
+邮箱: [您的邮箱]
 
 ```
 lfq_hbut/
@@ -184,6 +317,20 @@ npm run dev
 #### 3. 访问应用
 
 打开浏览器访问 http://localhost:3000
+
+#### 4. 登录说明
+
+登录页面提供两种模式切换：
+
+- 用户登录：进入专利管理和技术分析界面
+- 管理员登录：进入管理控制台和用户管理界面
+
+#### 5. 界面入口说明
+
+- 管理员控制台：`http://localhost:3000/admin`
+- 用户专利管理：`http://localhost:3000/patents`
+- 用户技术分析：`http://localhost:3000/analysis`
+- 用户管理：`http://localhost:3000/users`
 
 ### 生产环境部署
 

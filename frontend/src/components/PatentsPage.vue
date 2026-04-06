@@ -1,19 +1,16 @@
 <template>
   <div class="page-container">
-    <el-container style="height:100vh;">
-      <AppHeader/>
-      <el-main class="page-main">
-        <el-row :gutter="20">
-          <el-col :span="24">
-            <el-card class="main-card" shadow="hover">
-              <template #header>
-                <div class="card-header">
-                  <el-icon>
-                    <Document/>
-                  </el-icon>
-                  <span>专利管理</span>
-                </div>
-              </template>
+    <el-row :gutter="20">
+      <el-col :span="24">
+        <el-card class="main-card" shadow="hover">
+          <template #header>
+            <div class="card-header">
+              <el-icon>
+                <Document/>
+              </el-icon>
+              <span>{{ isAdmin ? '专利管理' : '专利查询' }}</span>
+            </div>
+          </template>
               <el-form :model="filter" class="filter-form" inline @submit.prevent="search">
                 <el-form-item label="关键词">
                   <el-input v-model="filter.keyword" clearable placeholder="标题关键词"
@@ -31,9 +28,17 @@
                     搜索
                   </el-button>
                 </el-form-item>
+                <el-form-item v-if="isAdmin">
+                  <el-button type="success" @click="showAddDialog">
+                    <el-icon>
+                      <Plus/>
+                    </el-icon>
+                    新增专利
+                  </el-button>
+                </el-form-item>
               </el-form>
               <el-table :data="patents" :header-cell-style="{background:'#f5f7fa', color:'#606266'}" stripe style="width: 100%"
-                        @row-click="showDetail" @row-dblclick="analyzePatent">
+                        @row-click="showDetail">
                 <el-table-column align="center" label="ID" prop="id" width="80"></el-table-column>
                 <el-table-column label="标题" min-width="300" prop="title" show-overflow-tooltip>
                   <template #default="{ row }">
@@ -50,13 +55,19 @@
                     <el-tag size="small">{{ row.country_code }}</el-tag>
                   </template>
                 </el-table-column>
-                <el-table-column align="center" fixed="right" label="操作" width="150">
+                <el-table-column align="center" fixed="right" label="操作" width="200">
                   <template #default="{ row }">
-                    <el-button size="mini" type="primary" @click.stop="analyzePatent(row)">
+                    <el-button v-if="!isAdmin" size="mini" type="primary" @click.stop="analyzePatent(row)">
                       <el-icon>
                         <DataAnalysis/>
                       </el-icon>
                       分析
+                    </el-button>
+                    <el-button v-if="isAdmin" size="mini" type="danger" @click.stop="deletePatent(row)">
+                      <el-icon>
+                        <Delete/>
+                      </el-icon>
+                      删除
                     </el-button>
                   </template>
                 </el-table-column>
@@ -101,18 +112,52 @@
             </span>
           </template>
         </el-dialog>
-      </el-main>
-    </el-container>
+
+    <!-- 新增专利对话框 -->
+    <el-dialog v-model="addVisible" title="新增专利" width="80%">
+      <el-form :model="newPatent" label-width="120px">
+        <el-form-item label="标题" required>
+          <el-input v-model="newPatent.title" placeholder="专利标题"></el-input>
+        </el-form-item>
+        <el-form-item label="申请人" required>
+          <el-input v-model="newPatent.applicant" placeholder="申请人名称"></el-input>
+        </el-form-item>
+        <el-form-item label="发明人">
+          <el-input v-model="newPatent.inventors" placeholder="发明人姓名，用逗号分隔"></el-input>
+        </el-form-item>
+        <el-form-item label="申请号">
+          <el-input v-model="newPatent.application_number" placeholder="申请号"></el-input>
+        </el-form-item>
+        <el-form-item label="公开号">
+          <el-input v-model="newPatent.publication_number" placeholder="公开号"></el-input>
+        </el-form-item>
+        <el-form-item label="公开日">
+          <el-date-picker v-model="newPatent.publication_date" format="YYYY-MM-DD" placeholder="选择日期" type="date"
+                          value-format="YYYY-MM-DD"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="国别">
+          <el-input v-model="newPatent.country_code" placeholder="国别代码，如CN"></el-input>
+        </el-form-item>
+        <el-form-item label="摘要">
+          <el-input v-model="newPatent.abstract_text" :rows="4" placeholder="专利摘要" type="textarea"></el-input>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+            <span class="dialog-footer">
+              <el-button @click="addVisible = false">取消</el-button>
+              <el-button type="primary" @click="addPatent">确定</el-button>
+            </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import AppHeader from './AppHeader.vue'
-import {DataAnalysis, Document, Search} from '@element-plus/icons-vue'
+import {DataAnalysis, Document, Search, Delete, Plus} from '@element-plus/icons-vue'
 
 export default {
-  components: {AppHeader, Document, Search, DataAnalysis},
+  components: {Document, Search, DataAnalysis, Delete, Plus},
   data() {
     return {
       patents: [],
@@ -121,13 +166,35 @@ export default {
       per: 20,
       filter: {keyword: '', applicant: ''},
       detailVisible: false,
-      currentPatent: null
+      currentPatent: null,
+      isAdmin: false,
+      addVisible: false,
+      newPatent: {
+        title: '',
+        applicant: '',
+        inventors: '',
+        application_number: '',
+        publication_number: '',
+        publication_date: '',
+        country_code: 'CN',
+        abstract_text: ''
+      }
     }
   },
   mounted() {
+    this.checkAdmin()
     this.fetchPatents()
   },
   methods: {
+    checkAdmin() {
+      axios.get('/api/status').then(r => {
+        console.log('Status response:', r.data)
+        this.isAdmin = r.data.login_type === 'admin'
+        console.log('isAdmin:', this.isAdmin)
+      }).catch(() => {
+        this.isAdmin = false
+      })
+    },
     fetchPatents() {
       const params = {page: this.page, per: this.per, ...this.filter}
       axios.get('/api/patents', {params}).then(r => {
@@ -171,6 +238,48 @@ export default {
     analyzePatent(row) {
       // 跳转到分析页面，传递专利ID
       this.$router.push({name: 'Analysis', query: {patent_id: row.id}})
+    },
+    deletePatent(row) {
+      this.$confirm(`确定删除专利 "${row.title}" 吗？`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        axios.delete(`/api/patents/${row.id}`).then(() => {
+          this.$message.success('删除成功')
+          this.fetchPatents()
+        }).catch(error => {
+          this.$message.error('删除失败')
+          console.error('Error deleting patent:', error)
+        })
+      })
+    },
+    showAddDialog() {
+      this.addVisible = true
+      this.newPatent = {
+        title: '',
+        applicant: '',
+        inventors: '',
+        application_number: '',
+        publication_number: '',
+        publication_date: '',
+        country_code: 'CN',
+        abstract_text: ''
+      }
+    },
+    addPatent() {
+      if (!this.newPatent.title || !this.newPatent.applicant) {
+        this.$message.error('标题和申请人为必填项')
+        return
+      }
+      axios.post('/api/patents', this.newPatent).then(() => {
+        this.$message.success('新增成功')
+        this.addVisible = false
+        this.fetchPatents()
+      }).catch(error => {
+        this.$message.error('新增失败')
+        console.error('Error adding patent:', error)
+      })
     }
   }
 }
@@ -178,13 +287,9 @@ export default {
 
 <style scoped>
 .page-container {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-}
-
-.page-main {
-  background: #f5f7fa;
   padding: 20px;
+  background: #f5f7fa;
+  min-height: 100vh;
 }
 
 .main-card {

@@ -25,6 +25,11 @@
       <el-table-column prop="page" label="页" width="60"></el-table-column>
       <el-table-column prop="status" label="状态" width="100"></el-table-column>
       <el-table-column prop="details" label="详情"></el-table-column>
+      <el-table-column v-if="isAdmin" label="操作" width="100">
+        <template #default="scope">
+          <el-button size="mini" type="danger" @click="deleteLog(scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <div style="text-align:right; margin-top:10px;">
       <el-pagination
@@ -40,7 +45,7 @@
 </template>
 <script>
 export default {
-  props: ['logs','total','page','per'],
+  props: ['logs', 'total', 'page', 'per', 'isAdmin'],
   data() {
     return {
       filter: { keyword: '', action: '', start: '', end: '' }
@@ -52,6 +57,9 @@ export default {
     },
     changePage(p) {
       this.$emit('page-change', p)
+    },
+    deleteLog(row) {
+      this.$emit('delete', row.id)
     }
   }
 }

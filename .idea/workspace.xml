@@ -5,13 +5,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="946d5d05-b88b-457c-a6f0-7b900d1a7949" name="更改" comment="优化前后端">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/configs.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/configs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/nlp.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/nlp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/nlp_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/nlp_tools.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/spiders/spider_base.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/spiders/spider_base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/spiders/wanfangtools.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/spiders/wanfangtools.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/sql/createTables.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backend/sql/createTables.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/sql/sql_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/sql/sql_tools.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/web.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/web.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/node_modules/.vite/deps/_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/AnalysisPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/AnalysisPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/AppHeader.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/AppHeader.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Dashboard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/LoginForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/LoginForm.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/LoginPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/LoginPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/LogsTable.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/LogsTable.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/PatentsPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/PatentsPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/StatusPanel.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/StatusPanel.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/TaskForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/TaskForm.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/TasksTable.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/TasksTable.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/router/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vite.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/static/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,7 +43,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="53" />
+    <option name="cachedIndexableFilesCount" value="72" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -55,9 +79,15 @@
     &quot;accountId&quot;: &quot;d5f4fafa-1a06-4c6c-883d-1bf4e78993d2&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/backend/spiders/spider_base.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
@@ -99,7 +129,7 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;aDefault&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.grazie&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;ts.external.directory.path&quot;: &quot;D:\\Apps\\PyCharm 2025.3.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
@@ -285,7 +315,12 @@
       <workItem from="1775360131157" duration="13000" />
       <workItem from="1775360163728" duration="3732000" />
       <workItem from="1775363919029" duration="284000" />
-      <workItem from="1775364339713" duration="1082000" />
+      <workItem from="1775364339713" duration="5426000" />
+      <workItem from="1775386112517" duration="1367000" />
+      <workItem from="1775387518258" duration="973000" />
+      <workItem from="1775388952047" duration="411000" />
+      <workItem from="1775392023538" duration="6483000" />
+      <workItem from="1775429922727" duration="4357000" />
     </task>
     <task id="LOCAL-00001" summary="优化爬虫结构为生产者-消费者">
       <option name="closed" value="true" />
@@ -343,7 +378,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775364074971</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="优化前后端">
+      <option name="closed" value="true" />
+      <created>1775365482452</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1775365482452</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

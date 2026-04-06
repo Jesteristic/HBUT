@@ -3,8 +3,8 @@ from threading import Lock
 from typing import Dict, Optional
 from loguru import logger
 import blackboxprotobuf
-from ..configs import CrawlerConfig, MysqlConfig
-from ..sql.sql_tools import RedisUtils, MysqlUtils
+from configs import CrawlerConfig, MysqlConfig
+from sql.sql_tools import RedisUtils, MysqlUtils
 
 
 class WangFangBase(threading.Thread):
@@ -32,7 +32,7 @@ class WangFangBase(threading.Thread):
                 self.redis = RedisUtils()
                 break
             except Exception as e:
-                logger.warning(f"Redis 第{config.max_retries + 1}次初始化失败: {e}")
+                logger.warning(f"Redis 第{_ + 1}次初始化失败: {e}")
         self.REDIS_TASK_LIST_KEY = "wanfang:task_queue"
         # 管理后台推送生产者搜索任务的 Redis 列表
         self.REDIS_PRODUCER_TASK_KEY = "wanfang:producer_tasks"
@@ -54,14 +54,14 @@ class WangFangBase(threading.Thread):
 
         # Mysql实例
         self.mysql = None
-        for _ in range(config.max_retries):
+        for _ in range(self.config.max_retries):
             try:
                 self.mysql = MysqlUtils(host=MysqlConfig.host, port=MysqlConfig.port, user=MysqlConfig.user,
                                         password=MysqlConfig.password, database=MysqlConfig.database,
                                         charset=MysqlConfig.charset)
                 break
             except Exception as e:
-                logger.warning(f"Mysql 第{config.max_retries + 1}次初始化失败: {e}")
+                logger.warning(f"Mysql 第{_ + 1}次初始化失败: {e}")
 
     @property
     def headers(self) -> Dict[str, str]:

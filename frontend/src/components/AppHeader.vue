@@ -8,12 +8,12 @@
         <h1>专利分析系统</h1>
       </div>
       <el-menu :default-active="$route.path" active-text-color="#ffd04b" background-color="transparent" class="nav-menu"
-               mode="horizontal" text-color="#fff">
-        <el-menu-item index="/dashboard">
+               mode="horizontal" text-color="#fff" @select="onNavSelect">
+        <el-menu-item v-if="user.username && isAdmin" index="/admin">
           <el-icon>
             <Monitor/>
           </el-icon>
-          <span>控制台</span>
+          <span>管理控制台</span>
         </el-menu-item>
         <el-menu-item index="/patents">
           <el-icon>
@@ -27,11 +27,24 @@
           </el-icon>
           <span>技术分析</span>
         </el-menu-item>
+        <el-menu-item v-if="isAdmin" index="/users">
+          <el-icon>
+            <User/>
+          </el-icon>
+          <span>用户管理</span>
+        </el-menu-item>
       </el-menu>
       <div class="user-section">
+        <el-badge :value="notificationCount" class="notification-badge">
+          <el-button type="link" @click="showNotifications">
+            <el-icon size="20">
+              <Bell/>
+            </el-icon>
+          </el-button>
+        </el-badge>
         <el-avatar :size="32" :src="user.avatar" icon="User"/>
         <span class="username">{{ user.username }}</span>
-        <el-button class="logout-btn" type="text" @click="logout">
+        <el-button class="logout-btn" type="link" @click="logout">
           <el-icon>
             <SwitchButton/>
           </el-icon>
@@ -44,14 +57,22 @@
 
 <script>
 import axios from 'axios'
-import {DataAnalysis, Document, DocumentAdd, Monitor, SwitchButton, User} from '@element-plus/icons-vue'
+import {Bell, DataAnalysis, Document, DocumentAdd, Monitor, SwitchButton, User} from '@element-plus/icons-vue'
 
 export default {
   name: 'AppHeader',
-  components: {DocumentAdd, Monitor, Document, DataAnalysis, User, SwitchButton},
+  components: {DocumentAdd, Monitor, Document, DataAnalysis, User, SwitchButton, Bell},
   data() {
     return {
-      user: {}
+      user: {},
+      loginMode: 'user',
+      notificationCount: 0,
+      notifications: []
+    }
+  },
+  computed: {
+    isAdmin() {
+      return this.loginMode === 'admin'
     }
   },
   mounted() {
@@ -61,12 +82,20 @@ export default {
     getUser() {
       axios.get('/api/status').then(r => {
         this.user = r.data.user || {}
+        this.loginMode = r.data.login_type || 'user'
       })
     },
     logout() {
       axios.get('/api/logout').then(() => {
         this.$router.push('/login')
       })
+    },
+    onNavSelect(path) {
+      this.$router.push(path)
+    },
+    showNotifications() {
+      // 显示通知弹窗
+      this.$message.info('通知功能开发中...')
     }
   }
 }
@@ -129,5 +158,9 @@ export default {
   display: flex;
   align-items: center;
   gap: 5px;
+}
+
+.notification-badge {
+  margin-right: 10px;
 }
 </style>

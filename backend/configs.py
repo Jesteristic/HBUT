@@ -15,6 +15,9 @@ class CrawlerConfig:
     delay_between_requests: float = 0.2  # 请求间延迟(秒)
     use_proxy: bool = False
     proxy: Optional[str] = None
+    max_pages: int = 10  # 最大页数
+    page_size: int = 20  # 每页大小
+    retry_times: int = 3  # 重试次数
 
 
 @dataclass

@@ -3,9 +3,9 @@ from loguru import logger
 from typing import Dict, Any, Optional
 import time
 import json
-from ..configs import CrawlerConfig
-from .spider_base import WangFangBase
-from ..parse_tools import extract_task_ids, extract_patent_fields
+from configs import CrawlerConfig
+from spiders.spider_base import WangFangBase
+from parse_tools import extract_task_ids, extract_patent_fields
 from curl_cffi import requests
 
 
@@ -185,6 +185,7 @@ class WanfangPatentProducer(WangFangBase):
             logger.bind(action="fetch_task", keyword=task.get("keyword"), page=task.get("pages"))
             logger.info(f"生产者000{self.producerID}:获取到新任务 {task}")
 
+            task_id = task.get('id')
             keyword = task.get("keyword")
             page_size = task.get("page_size", self.config.max_workers)
             pages = task.get("pages", 1)
@@ -192,22 +193,47 @@ class WanfangPatentProducer(WangFangBase):
                 logger.warning(f"生产者000{self.producerID}:任务缺少 keyword 字段 {task}")
                 continue
 
+            if task_id and self.redis.sismember('wanfang:cancelled_producer_tasks', str(task_id)):
+                logger.info(f"生产者000{self.producerID}:任务 {task_id} 已被取消，跳过执行")
+                try:
+                    self.mysql.update('producer_tasks', {'status': 'canceled'}, condition='id=%s',
+                                      condition_params=(task_id,))
+                except Exception:
+                    pass
+                continue
+
             # update task status in DB
             try:
-                self.mysql.update('producer_tasks', {'status': 'running'},
-                                   condition='keyword=%s AND page_size=%s AND pages=%s AND status=%s',
-                                   condition_params=(keyword, page_size, pages, 'pending'))
+                if task_id:
+                    self.mysql.update('producer_tasks', {'status': 'running'}, condition='id=%s',
+                                      condition_params=(task_id,))
+                else:
+                    self.mysql.update('producer_tasks', {'status': 'running'},
+                                      condition='keyword=%s AND page_size=%s AND pages=%s AND status=%s',
+                                      condition_params=(keyword, page_size, pages, 'pending'))
             except Exception:
                 pass
 
+            canceled = False
             for page in range(1, pages + 1):
+                if task_id and self.redis.sismember('wanfang:cancelled_producer_tasks', str(task_id)):
+                    logger.info(f"生产者000{self.producerID}:任务 {task_id} 已被取消，停止后续页码")
+                    canceled = True
+                    break
                 self._make_request(keyword, page, page_size)
 
-            # mark completed
+            # mark completed or canceled
             try:
-                self.mysql.update('producer_tasks', {'status': 'done'},
-                                   condition='keyword=%s AND page_size=%s AND pages=%s AND status=%s',
-                                   condition_params=(keyword, page_size, pages, 'running'))
+                if canceled and task_id:
+                    self.mysql.update('producer_tasks', {'status': 'canceled'}, condition='id=%s',
+                                      condition_params=(task_id,))
+                elif task_id:
+                    self.mysql.update('producer_tasks', {'status': 'done'}, condition='id=%s',
+                                      condition_params=(task_id,))
+                else:
+                    self.mysql.update('producer_tasks', {'status': 'done'},
+                                      condition='keyword=%s AND page_size=%s AND pages=%s AND status=%s',
+                                      condition_params=(keyword, page_size, pages, 'running'))
             except Exception:
                 pass
 
